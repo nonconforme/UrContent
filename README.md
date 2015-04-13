@@ -10,7 +10,7 @@ non-existance would be the same as its' existence) the file is automatically rem
 
 This applies to:
 
-* Sound XML Files
+* Sound XML files
 * Texture XML files
 
 ## TODO
@@ -26,4 +26,4 @@ FirstFloor.ModernUI and Xceed WPF Toolkit
 
 ## UrhoInterop
 
-UrhoInterop is a the C# library that UrContent uses to deal with Urho3Ds XML files, it's written with WPF in mind. You're welcome to use it for your own tools.
+UrhoInterop is a C# library that UrContent uses to deal with Urho3Ds XML files, it's written with WPF in mind. You're welcome to use it for your own tools.
