@@ -1,0 +1,33 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace Designer.Graph {
+    /// <summary>
+    /// Interaction logic for GraphNode.xaml
+    /// </summary>
+    public partial class GraphNode : UserControl {
+        public GraphNode() {
+            InitializeComponent();
+
+            inputSockets.Children.Add(new GraphSocket(Colors.DarkRed, Colors.Salmon));
+            inputSockets.Children.Add(new GraphSocket(Colors.DarkGreen, Colors.LightGreen));
+            inputSockets.Children.Add(new GraphSocket(Colors.DarkBlue, Colors.LightBlue));
+            inputSockets.Children.Add(new GraphSocket(Colors.Gray, Colors.White));
+
+            outputSockets.Children.Add(new GraphSocket(Colors.DarkRed, Colors.Salmon) { Margin = new Thickness(15, 0, 0, 0) });
+            outputSockets.Children.Add(new GraphSocket(Colors.DarkGreen, Colors.LightGreen) { Margin = new Thickness(15, 0, 0, 0) });
+        }
+    }
+}

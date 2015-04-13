@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="45b98ff7-6fc9-4489-887f-1ad9afa2704b" Name="UrContent" Language="1033" Version="1.0.0.0" Manufacturer="JSandusky" UpgradeCode="d8c81d1b-6d15-4729-8ad0-184649efe690">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes"/>
+
+		<Feature Id="ProductFeature" Title="UrContent" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="DesignerInstaller" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+            <Component Id="APP" Guid="49933a50-6898-4456-aa02-915523e72807">
+                <File Id="APPEXE" Source="../Designer/Bin/Debug/Designer.exe" KeyPath="yes" Checksum="yes" />
+                <File Id="MUI" Source="../Designer/Bin/Debug/FirstFloor.ModernUI.dll" Checksum="yes" />
+                <File Id="URHO" Source="../Designer/Bin/Debug/UrhoInterop.dll" Checksum="yes" />
+            </Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>
