@@ -252,6 +252,27 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Xsd\EffectSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Xsd\MaterialSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Xsd\RenderPathSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Xsd\Sound.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Xsd\TechniqueSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Xsd\Texture2DSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Xsd\TextureCubeSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
