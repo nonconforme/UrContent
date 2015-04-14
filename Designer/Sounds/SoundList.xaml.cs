@@ -27,6 +27,19 @@ namespace Designer.Sounds {
             formStack.Children.Add(form_ = new ReflectiveForm(typeof(Urho.Sound)));
             texTree.DataContext = Project.inst().SoundFiles;
             texTree.SelectedItemChanged += texTree_SelectedItemChanged;
+
+            DataGridTemplateColumn col = new DataGridTemplateColumn();
+            Binding imgBinding = new Binding("Name");
+            FrameworkElementFactory vbtn = new FrameworkElementFactory(typeof(Button));
+            vbtn.SetValue(Button.ContentProperty, "Play");
+            vbtn.SetValue(Button.MarginProperty, new Thickness(2));
+            vbtn.AddHandler(Button.ClickEvent, new RoutedEventHandler(onPlayGridSound));
+            ((DataGridTemplateColumn)col).CellTemplate = new DataTemplate();
+            ((DataGridTemplateColumn)col).CellTemplate.VisualTree = vbtn;
+            col.Header = "Play";
+            gridView.Columns.Add(col);
+
+            gridView.DataContext = Project.inst().SoundFiles.GetFlat();
         }
 
         void texTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
@@ -48,5 +61,28 @@ namespace Designer.Sounds {
             if (l != null)
                 l.Sound.Save();
         }
+
+        void onPlayGridSound(object sender, EventArgs e)
+        {
+            try
+            {
+                Button btn = sender as Button;
+
+                // This is a little hacky
+                DependencyObject obj = VisualTreeHelper.GetParent(btn);
+                if (obj is ContentPresenter)
+                {
+                    Urho.Sound snd = ((ContentPresenter)obj).DataContext as Urho.Sound;
+                    if (player_ == null)
+                        player_ = new System.Media.SoundPlayer();
+                    player_.SoundLocation = snd.Name;
+                    player_.Play();
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
     }
 }

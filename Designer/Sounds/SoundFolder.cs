@@ -82,6 +82,27 @@ namespace Designer.Sounds {
         public string Name {
             get { return path_.Replace(UrhoPaths.inst().Root, ""); }
         }
+
+        void GetFlat(ObservableCollection<Urho.Sound> holder)
+        {
+            foreach (SoundItem l in this.Children)
+            {
+                if (l is SoundFolder)
+                    ((SoundFolder)l).GetFlat(holder);
+                else if (l is SoundLeaf)
+                {
+                    
+                    holder.Add(((SoundLeaf)l).Sound);
+                }
+            }
+        }
+
+        public ObservableCollection<Urho.Sound> GetFlat()
+        {
+            ObservableCollection<Urho.Sound> ret = new ObservableCollection<Urho.Sound>();
+            GetFlat(ret);
+            return ret;
+        }
     }
 
     public class SoundLeaf : SoundItem {
