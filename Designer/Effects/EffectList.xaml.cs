@@ -22,10 +22,14 @@ namespace Designer.Effects {
     public partial class EffectList : UserControl, IContent {
         EffectFolder effects_;
         ReflectiveForm form_;
+        NothingHere nothing_;
 
         public EffectList() {
             InitializeComponent();
             form.Children.Add(form_ = new ReflectiveForm(typeof(Urho.ParticleEffect)));
+            form.Children.Add(nothing_ = new NothingHere("Particle Effect"));
+            nothing_.Visibility = System.Windows.Visibility.Visible;
+            form_.Visibility = System.Windows.Visibility.Collapsed;
         }
 
         public void OnFragmentNavigation(FirstFloor.ModernUI.Windows.Navigation.FragmentNavigationEventArgs e) {
@@ -42,7 +46,16 @@ namespace Designer.Effects {
 
         void effectList_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
             if (e.NewValue is EffectLeaf)
+            {
+                form_.Visibility = System.Windows.Visibility.Visible;
                 form_.SetObject(((EffectLeaf)e.NewValue).DisplayName, ((EffectLeaf)e.NewValue).Effect);
+                nothing_.Visibility = System.Windows.Visibility.Collapsed;
+            }
+            else
+            {
+                form_.Visibility = System.Windows.Visibility.Collapsed;
+                nothing_.Visibility = System.Windows.Visibility.Visible;
+            }
         }
 
         public void OnNavigatingFrom(FirstFloor.ModernUI.Windows.Navigation.NavigatingCancelEventArgs e) {

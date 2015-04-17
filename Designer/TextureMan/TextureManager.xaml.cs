@@ -24,6 +24,7 @@ namespace Designer.TextureMan {
         ObservableCollection<Urho.BaseTexture> textures_;
         ReflectiveForm textureForm_;
         ReflectiveForm cubeForm_;
+        NothingHere nothing_;
         ObservableCollection<Urho.Texture> flat_ = new ObservableCollection<Urho.Texture>();
 
         public TextureManager() {
@@ -44,15 +45,27 @@ namespace Designer.TextureMan {
             texTree.DataContext = Project.inst().Textures;
             texTree.SelectedItemChanged += texTree_SelectedItemChanged;
             gridView.DataContext = flat_ = Project.inst().Textures.GetFlat();
+
+            formStack.Children.Add(nothing_ = new NothingHere("Texture"));
+            nothing_.Visibility = System.Windows.Visibility.Visible;
+            textureForm_.Visibility = System.Windows.Visibility.Collapsed;
         }
 
         void texTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
             TextureLeaf l = e.NewValue as TextureLeaf;
-            if (l != null) {
+            if (l != null)
+            {
+                nothing_.Visibility = System.Windows.Visibility.Collapsed;
+                textureForm_.Visibility = System.Windows.Visibility.Visible;
                 textureForm_.SetObject(l.Name, l.Texture as Urho.Texture);
                 preview.Source = new BitmapImage(new Uri(l.Texture.Name));
-            } else
+            }
+            else
+            {
                 preview.Source = null;
+                nothing_.Visibility = System.Windows.Visibility.Visible;
+                textureForm_.Visibility = System.Windows.Visibility.Collapsed;
+            }
         }
 
         public void OnFragmentNavigation(FirstFloor.ModernUI.Windows.Navigation.FragmentNavigationEventArgs e) {

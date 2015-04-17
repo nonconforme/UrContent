@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="Designer.NothingHere"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Border MinWidth="240" VerticalAlignment="Center" HorizontalAlignment="Center" Background="AliceBlue" BorderBrush="LightBlue" BorderThickness="5" Padding="10" CornerRadius="25">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="No Selection" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
+                <TextBlock Name="txtText" Text="Nothing here" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

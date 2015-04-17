@@ -108,6 +108,9 @@
       <DependentUpon>LaunchScreen.xaml</DependentUpon>
     </Compile>
     <Compile Include="MaterialEdit\MaterialFolder.cs" />
+    <Compile Include="NothingHere.xaml.cs">
+      <DependentUpon>NothingHere.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Project.cs" />
     <Compile Include="ReflectMatch.cs" />
     <Compile Include="SettingsDlg.xaml.cs">
@@ -194,6 +197,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MaterialEdit\MaterialEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NothingHere.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

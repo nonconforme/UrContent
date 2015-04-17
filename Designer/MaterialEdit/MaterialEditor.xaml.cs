@@ -20,19 +20,27 @@ namespace Designer.MaterialEdit {
     /// </summary>
     public partial class MaterialEditor : UserControl {
         ReflectiveForm form_;
+        NothingHere nothing_;
 
         public MaterialEditor() {
             InitializeComponent();
             formStack.Children.Add(form_ = new ReflectiveForm(typeof(Urho.Material)));
             texTree.DataContext = Project.inst().Materials;
             texTree.SelectedItemChanged += texTree_SelectedItemChanged;
+            formStack.Children.Add(nothing_ = new NothingHere("Material"));
+            nothing_.Visibility = System.Windows.Visibility.Visible;
+            form_.Visibility = System.Windows.Visibility.Collapsed;
         }
 
         void texTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
             MaterialLeaf l = e.NewValue as MaterialLeaf;
             if (l != null) {
+                form_.Visibility = System.Windows.Visibility.Visible;
+                nothing_.Visibility = System.Windows.Visibility.Collapsed;
                 form_.SetObject(l.Name, l.Material);
             } else {
+                form_.Visibility = System.Windows.Visibility.Collapsed;
+                nothing_.Visibility = System.Windows.Visibility.Visible;
             }
         }
 
