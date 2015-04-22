@@ -64,6 +64,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Animation\AnimationLoader.cs" />
+    <Compile Include="Animation\ModelLoader.cs" />
     <Compile Include="BaseClass.cs" />
     <Compile Include="Controls\GridEditor.xaml.cs">
       <DependentUpon>GridEditor.xaml</DependentUpon>
@@ -126,9 +128,6 @@
     <Compile Include="TextureMan\TextureFolder.cs" />
     <Compile Include="TextureMan\TextureManager.xaml.cs">
       <DependentUpon>TextureManager.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="TileEdit\TileEditor.xaml.cs">
-      <DependentUpon>TileEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\UIFolder.cs" />
     <Compile Include="UI\UIList.xaml.cs">
@@ -220,10 +219,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TileEdit\TileEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UI\UIList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -259,25 +254,40 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="Xsd\EffectSchema.xsd">
+    <None Include="Xsd\Animation.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\MaterialSchema.xsd">
+    <None Include="Xsd\ParticleEffect.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\RenderPathSchema.xsd">
+    <None Include="Xsd\Material.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Xsd\ObjectAnimation.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Xsd\RenderPath.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Xsd\Scene.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Xsd\Sound.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\TechniqueSchema.xsd">
+    <None Include="Xsd\Technique.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\Texture2DSchema.xsd">
+    <None Include="Xsd\Texture.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\TextureCubeSchema.xsd">
+    <None Include="Xsd\Texture3D.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Xsd\TextureCube.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Xsd\UI.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
@@ -295,7 +305,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Animation\" />
     <Folder Include="Effects\Interop\" />
     <Folder Include="Graph\UINode\" />
     <Folder Include="MaterialEdit\Interop\" />
@@ -303,8 +312,6 @@
     <Folder Include="Render\" />
     <Folder Include="Scenes\" />
     <Folder Include="ShaderGraph\" />
-    <Folder Include="TileEdit\Blocks\" />
-    <Folder Include="TileEdit\Tiles\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

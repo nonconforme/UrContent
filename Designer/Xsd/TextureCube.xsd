@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="TextureCubeSchema"
+    elementFormDefault="qualified"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+
+  <xs:complexType name="CubeFace">
+    <xs:attribute name="name" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:simpleType name="CubeLayout">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="horizontal" />
+      <xs:enumeration value="horizontalnvidia" />
+      <xs:enumeration value="verticalcross" />
+      <xs:enumeration value="blender" />
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:element name="cubemap">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="image" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <xs:attribute name="layout" type="CubeLayout" use="optional" default="horizontal"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="face" type="CubeFace" minOccurs="0" maxOccurs="6" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

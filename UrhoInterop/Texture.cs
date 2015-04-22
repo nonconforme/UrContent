@@ -68,66 +68,93 @@ namespace Urho {
             Name = fromFile;
             fileName_ = fromFile;
             string path = System.IO.Path.ChangeExtension(fromFile, "xml");
-            if (System.IO.File.Exists(path)) {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(path);
-                XmlElement root = doc.DocumentElement;
-                foreach (XmlElement elem in root.ChildNodes) {
-                    if (elem.Name.ToLower().Equals("address")) {
-                        string coord = elem.GetAttribute("coord");
-                        string mode = elem.GetAttribute("mode");
-                        TextureAddress addr = TextureAddress.CLAMP;
-                        if (mode.Equals("wrap"))
-                            addr = TextureAddress.WRAP;
-                        else if (mode.Equals("repeat"))
-                            addr = TextureAddress.REPEAT;
-                        else if (mode.Equals("clamp"))
-                            addr = TextureAddress.CLAMP;
-                        else if (mode.Equals("border"))
-                            addr = TextureAddress.BORDER;
-                        else if (mode.Equals("mirror"))
-                            addr = TextureAddress.MIRROR;
+            try
+            {
+                if (System.IO.File.Exists(path))
+                {
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(path);
+                    XmlElement root = doc.DocumentElement;
+                    foreach (XmlElement elem in root.ChildNodes)
+                    {
+                        if (elem.Name.ToLower().Equals("address"))
+                        {
+                            string coord = elem.GetAttribute("coord");
+                            string mode = elem.GetAttribute("mode");
+                            TextureAddress addr = TextureAddress.CLAMP;
+                            if (mode.Equals("wrap"))
+                                addr = TextureAddress.WRAP;
+                            else if (mode.Equals("repeat"))
+                                addr = TextureAddress.REPEAT;
+                            else if (mode.Equals("clamp"))
+                                addr = TextureAddress.CLAMP;
+                            else if (mode.Equals("border"))
+                                addr = TextureAddress.BORDER;
+                            else if (mode.Equals("mirror"))
+                                addr = TextureAddress.MIRROR;
 
-                        if (coord.Equals("u"))
-                            this.UAddress = addr;
-                        else if (coord.Equals("v"))
-                            this.VAddress = addr;
-                        else if (coord.Equals("w"))
-                            this.WAddress = addr;
-                    } else if (elem.Name.ToLower().Equals("border")) {
-                        if (elem.HasAttribute("color"))
-                            BorderColor = UColor.FromString(elem.GetAttribute("color"));
-                    } else if (elem.Name.ToLower().Equals("filter")) {
-                        if (elem.HasAttribute("mode")) {
-                            string str = elem.GetAttribute("mode").ToLower();
-                            if (str.Equals("nearest")) {
-                                FilteringMode = FilteringMode.NEAREST;
-                            } else if (str.Equals("bilinear")) {
-                                FilteringMode = FilteringMode.BILINEAR;
-                            } else if (str.Equals("trilinear")) {
-                                FilteringMode = FilteringMode.TRILINEAR;
-                            } else if (str.Equals("anisotropic")) {
-                                FilteringMode = FilteringMode.ANISOTROPIC;
-                            } else {
-                                FilteringMode = FilteringMode.DEFAULT;
+                            if (coord.Equals("u"))
+                                this.UAddress = addr;
+                            else if (coord.Equals("v"))
+                                this.VAddress = addr;
+                            else if (coord.Equals("w"))
+                                this.WAddress = addr;
+                        }
+                        else if (elem.Name.ToLower().Equals("border"))
+                        {
+                            if (elem.HasAttribute("color"))
+                                BorderColor = UColor.FromString(elem.GetAttribute("color"));
+                        }
+                        else if (elem.Name.ToLower().Equals("filter"))
+                        {
+                            if (elem.HasAttribute("mode"))
+                            {
+                                string str = elem.GetAttribute("mode").ToLower();
+                                if (str.Equals("nearest"))
+                                {
+                                    FilteringMode = FilteringMode.NEAREST;
+                                }
+                                else if (str.Equals("bilinear"))
+                                {
+                                    FilteringMode = FilteringMode.BILINEAR;
+                                }
+                                else if (str.Equals("trilinear"))
+                                {
+                                    FilteringMode = FilteringMode.TRILINEAR;
+                                }
+                                else if (str.Equals("anisotropic"))
+                                {
+                                    FilteringMode = FilteringMode.ANISOTROPIC;
+                                }
+                                else
+                                {
+                                    FilteringMode = FilteringMode.DEFAULT;
+                                }
                             }
                         }
-                    } else if (elem.Name.ToLower().Equals("mipmap")) {
-                        if (elem.HasAttribute("enable"))
-                            Mipmapping = elem.GetAttribute("enable").Equals("true");
-                    } else if (elem.Name.ToLower().Equals("quality")) {
-                        if (elem.HasAttribute("low"))
-                            LowQualityMIP = int.Parse(elem.GetAttribute("low"));
-                        if (elem.HasAttribute("medium"))
-                            MedQualityMIP = int.Parse(elem.GetAttribute("medium"));
-                        if (elem.HasAttribute("high"))
-                            HighQualityMIP = int.Parse(elem.GetAttribute("high"));
-                    } else if (elem.Name.ToLower().Equals("srgb")) {
-                        if (elem.HasAttribute("enable"))
-                            SRGBEnabled = elem.GetAttribute("enable").Equals("true");
+                        else if (elem.Name.ToLower().Equals("mipmap"))
+                        {
+                            if (elem.HasAttribute("enable"))
+                                Mipmapping = elem.GetAttribute("enable").Equals("true");
+                        }
+                        else if (elem.Name.ToLower().Equals("quality"))
+                        {
+                            if (elem.HasAttribute("low"))
+                                LowQualityMIP = int.Parse(elem.GetAttribute("low"));
+                            if (elem.HasAttribute("medium"))
+                                MedQualityMIP = int.Parse(elem.GetAttribute("medium"));
+                            if (elem.HasAttribute("high"))
+                                HighQualityMIP = int.Parse(elem.GetAttribute("high"));
+                        }
+                        else if (elem.Name.ToLower().Equals("srgb"))
+                        {
+                            if (elem.HasAttribute("enable"))
+                                SRGBEnabled = elem.GetAttribute("enable").Equals("true");
+                        }
                     }
                 }
             }
+            catch (Exception ex) { }
         }
 
         public override void Save() {

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="SceneSchema"
+    elementFormDefault="qualified"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+
+  <xs:complexType name="AttributeRef">
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="value" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="ComponentRef">
+    <xs:sequence>
+      <xs:element name="attribute" type="AttributeRef" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="type" type="xs:string" use="required" />
+    <xs:attribute name="id" type="xs:integer" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="NodeRef">
+    <xs:sequence>
+      <xs:element name="attribute" type="AttributeRef" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="component" type="ComponentRef" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="node" type="NodeRef" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:integer" use="required" />
+  </xs:complexType>
+
+  <xs:element name="scene" type="NodeRef" /> <!-- for handling a scene -->
+  <xs:element name="node" type="NodeRef" /> <!-- for handling an object template -->
+  
+</xs:schema>

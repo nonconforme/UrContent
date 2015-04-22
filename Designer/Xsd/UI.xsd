@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="UISchema"
+    elementFormDefault="qualified"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+
+  <xs:complexType name="AttributeRef">
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="value" type="xs:string" use="required" />
+  </xs:complexType>
+  
+  <xs:complexType name="ElementRef">
+    <xs:sequence>
+      <xs:element name="attribute" type="AttributeRef" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="element" type="ElementRef" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+    
+    <xs:attribute name="name" type="xs:string" use="optional" />
+    <xs:attribute name="type" type="xs:string" use="optional" />
+    <xs:attribute name="style" type="xs:string" use="optional" />
+    <xs:attribute name="internal" type="xs:boolean" use="optional" />
+  </xs:complexType>
+  
+  <xs:element name="element" type="ElementRef" />
+  
+</xs:schema>

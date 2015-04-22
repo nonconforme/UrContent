@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ObjectAnimSchema"
+    elementFormDefault="qualified"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+
+  <xs:simpleType name="InterpMethod">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Linear" />
+      <xs:enumeration value="Spline" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="WrapModes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Loop" />
+      <xs:enumeration value="Once" />
+      <xs:enumeration value="Clamp" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="KeyframeRef">
+    <xs:sequence>
+      
+    </xs:sequence>
+    <xs:attribute name="time" type="xs:float" use="required" />
+    <xs:attribute name="type" type="xs:string" use="required" />
+    <xs:attribute name="value" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType name="VariantMapRef">
+    <xs:sequence>
+      <xs:element name="variant" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="hash" type="xs:string" use="required" />
+          <xs:attribute name="type" type="xs:string" use="required" />
+          <xs:attribute name="value" type="xs:string" use="optional" />
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="EventFrameRef">
+    <xs:sequence>
+      <xs:element name="eventdata" type="VariantMapRef" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="time" type="xs:float" use="required" />
+    <xs:attribute name="eventtype" type="xs:unsignedInt" use="required" />
+  </xs:complexType>
+  
+  <xs:complexType name="ValueAnimationRef">
+    <xs:sequence>
+      <xs:element name="keyframe" type="KeyframeRef" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="interpolationmethod" type="InterpMethod" use="optional" default="Linear" />
+    <xs:attribute name="splinetension" type="xs:float" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType name="AttrAnimationRef">
+    <xs:sequence>
+      <xs:element name="keyframe" type="KeyframeRef" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="interpolationmethod" type="InterpMethod" use="optional" default="Linear" />
+    <xs:attribute name="splinetension" type="xs:float" use="optional" />
+    <xs:attribute name="wrapmode" type="WrapModes" use="optional" default="Loop" />
+    <xs:attribute name="speed" type="xs:float" use="required" />
+  </xs:complexType>
+
+  <xs:element name="valueanimation" type="ValueAnimationRef" />
+
+  <xs:element name="objectanimation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="attributeanimation" type="AttrAnimationRef" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      
+    </xs:complexType>
+  </xs:element>
+  
+</xs:schema>

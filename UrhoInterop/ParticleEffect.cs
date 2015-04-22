@@ -56,6 +56,14 @@ namespace Urho {
             set { material_ = value; OnPropertyChanged("Material"); }
         }
 
+        int numParticles_ = 10;
+        [DefaultValue(10)]
+        public int NumParticles
+        {
+            get { return numParticles_; }
+            set { numParticles_ = value; OnPropertyChanged("NumParticles"); }
+        }
+
         bool updateInvisible_ = false;
         [DefaultValue(false)]
         public bool UpdateInvisible {
@@ -236,6 +244,8 @@ namespace Urho {
 
                 foreach (XmlElement mat in doc.DocumentElement.GetElementsByTagName("material"))
                     Material = mat.GetAttribute("name");
+                foreach (XmlElement num in doc.DocumentElement.GetElementsByTagName("numparticles"))
+
                 foreach (XmlElement u in doc.DocumentElement.GetElementsByTagName("updateinvisible"))
                     UpdateInvisible = u.GetAttribute("enable").Equals("true");
                 foreach (XmlElement rel in doc.DocumentElement.GetElementsByTagName("relative"))
@@ -314,6 +324,7 @@ namespace Urho {
             doc.AppendChild(root);
 
             root.AppendChild(doc.CreateElement("material").SimpleTag("name", Material));
+            root.AppendChild(doc.CreateElement("numparticles").SimpleTag("value", NumParticles.ToString()));
             root.AppendChild(doc.CreateElement("updateinvisible").SimpleTag("enable", UpdateInvisible ? "true" : "false"));
             root.AppendChild(doc.CreateElement("relative").SimpleTag("enable", Relative ? "true" : "false"));
             root.AppendChild(doc.CreateElement("scaled").SimpleTag("enable", Scaled ? "true" : "false"));

@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema id="EffectSchema"
-    targetNamespace="http://tempuri.org/EffectSchema.xsd"
     elementFormDefault="qualified"
-    xmlns="http://tempuri.org/EffectSchema.xsd"
-    xmlns:mstns="http://tempuri.org/EffectSchema.xsd"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
 >
 
@@ -42,7 +39,7 @@
     <xs:attribute name="time" type="xs:float" use="required" />
   </xs:complexType>
   
-  <xs:element name="particleemitter">
+  <xs:element name="particleeffect">
     <xs:complexType>
       <xs:sequence>
 
@@ -52,6 +49,7 @@
           </xs:complexType>
         </xs:element>
 
+        <xs:element name="numparticles" type="ValueRef" minOccurs="0" maxOccurs="1" />
         <xs:element name="updateinvisible" type="ToggleRef" minOccurs="0" maxOccurs="1" />
         <xs:element name="relative" type="ToggleRef" minOccurs="0" maxOccurs="1" />
         <xs:element name="scaled" type="ToggleRef" minOccurs="0" maxOccurs="1" />
