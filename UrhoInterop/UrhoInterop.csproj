@@ -48,9 +48,11 @@
     <Compile Include="Font.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="Model\Animation.cs" />
+    <Compile Include="Model\AnimationLoader.cs" />
     <Compile Include="Model\Geometry.cs" />
     <Compile Include="Model\IndexBuffer.cs" />
     <Compile Include="Model\Model.cs" />
+    <Compile Include="Model\ModelLoader.cs" />
     <Compile Include="Model\Skeleton.cs" />
     <Compile Include="Model\VertexBuffer.cs" />
     <Compile Include="Model\VertexMorph.cs" />

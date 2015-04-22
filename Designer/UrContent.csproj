@@ -64,8 +64,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Animation\AnimationLoader.cs" />
-    <Compile Include="Animation\ModelLoader.cs" />
     <Compile Include="BaseClass.cs" />
     <Compile Include="Controls\GridEditor.xaml.cs">
       <DependentUpon>GridEditor.xaml</DependentUpon>
@@ -305,6 +303,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Animation\" />
     <Folder Include="Effects\Interop\" />
     <Folder Include="Graph\UINode\" />
     <Folder Include="MaterialEdit\Interop\" />

@@ -6,15 +6,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Urho;
 
-namespace Designer.Animation
+namespace UrhoInterop.Model
 {
     public static class ModelLoader
     {
-        public static void ReadModel(BinaryReader rdr)
+        public static Model ReadModel(BinaryReader rdr)
         {
             byte[] magic = rdr.ReadBytes(4);
             if (!BitConverter.ToString(magic, 0).Equals("UMDL"))
-                return;
+                return null;
+
+            Model ret = new Model();
 
             uint vertexBufferCt = rdr.ReadUInt32();
             //Read the vertex buffers
@@ -26,6 +28,7 @@ namespace Designer.Animation
                 uint morphStart = rdr.ReadUInt32();
                 uint morphCt = rdr.ReadUInt32();
                 byte[] vertexData = rdr.ReadBytes((int)(vertCt * vertexSize));
+                ret.VertexBuffers.Add(new VertexBuffer(vertexData, (int)vertexSize));
             }
 
             uint indexBufferCt = rdr.ReadUInt32();
@@ -34,11 +37,14 @@ namespace Designer.Animation
                 uint indexCt = rdr.ReadUInt32();
                 uint indexSize = rdr.ReadUInt32();
                 byte[] indexData = rdr.ReadBytes((int)(indexCt * indexSize));
+                ret.IndexBuffers.Add(new IndexBuffer(indexData));
             }
 
             uint geomCt = rdr.ReadUInt32();
             for (uint i = 0; i < geomCt; ++i)
             {
+                Geometry geom = new Geometry();
+
                 uint boneMapCt = rdr.ReadUInt32();
                 byte[] boneMappingBytes = rdr.ReadBytes((int)(sizeof(uint) * boneMapCt));
                 uint[] boneMapping = new uint[boneMapCt];
@@ -46,6 +52,8 @@ namespace Designer.Animation
                 {
                     boneMapping[boneIdx] = BitConverter.ToUInt32(boneMappingBytes, idx);
                 }
+                geom.BoneMapping = boneMapping;
+
                 uint lodCt = rdr.ReadUInt32();
 
                 for (int lodIdx = 0; lodIdx < lodCt; ++lodIdx)
@@ -57,58 +65,94 @@ namespace Designer.Animation
                     uint drawRangeStart = rdr.ReadUInt32();
                     uint drawRangeEnd = rdr.ReadUInt32();
 
+                    LOD lod = new LOD();
+                    lod.VertexBuffer = ret.VertexBuffers[(int)vertBufferIndex];
+                    lod.IndexBuffer = ret.IndexBuffers[(int)indexBufferIndex];
+                    lod.IndexStart = drawRangeStart;
+                    lod.IndexEnd = drawRangeEnd;
+                    lod.Distance = dist;
+                    lod.Primitive = prim;
+
+                    geom.LODs.Add(lod);
                 }
+
+                ret.Geometries.Add(geom);
             }
 
             uint vertexMorphCt = rdr.ReadUInt32();
 
-            for (int i = 0; i < vertexBufferCt; ++i)
+            for (int i = 0; i < vertexMorphCt; ++i)
             {
                 string name = ReadCString(rdr);
                 uint affectedBuffers = rdr.ReadUInt32();
 
+                VertexMorph morph = new VertexMorph();
+                morph.Name = name;
+
                 for (int bufIdx = 0; bufIdx < affectedBuffers; ++i)
                 {
-                    uint affectBuffIdx = rdr.ReadUInt32();
-                    uint affectBuffMask = rdr.ReadUInt32();
-                    uint affectedVertCt = rdr.ReadUInt32();
+                    MorphAffectedBuffer buff = new MorphAffectedBuffer();
+                    buff.Idx = rdr.ReadUInt32();
+                    buff.Mask = rdr.ReadUInt32();
+                    buff.VertCt = rdr.ReadUInt32();
+                    buff.Buffer = ret.VertexBuffers[(int)buff.Idx];
+                    morph.Buffers.Add(buff);
 
-                    for (int vertIdx = 0; vertIdx < affectedVertCt; ++vertIdx)
+                    for (int vertIdx = 0; vertIdx < buff.VertCt; ++vertIdx)
                     {
                         uint morphVertexIndex = rdr.ReadUInt32();
                         //\todo check mask
-                        Vector3 pos = ReadVector3(rdr);
-                        Vector3 norm = ReadVector3(rdr);
-                        Vector3 tan = ReadVector3(rdr);
+                        MorphVertex vert = new MorphVertex();
+
+                        if ((buff.Mask & 0x1) != 0)
+                            vert.Position = ReadVector3(rdr);
+                        if ((buff.Mask & 0x2) != 0)
+                            vert.Normal = ReadVector3(rdr);
+                        if ((buff.Mask & 0x80) != 0)
+                            vert.Tangent = ReadVector3(rdr);
+                        buff.Vertices.Add(vert);
                     }
                 }
             }
 
             //Skeleton data
+            Skeleton skel = new Skeleton();
 
             uint boneCount = rdr.ReadUInt32();
             for (int i = 0; i < boneCount; ++i)
             {
-                string boneName = ReadCString(rdr);
-                uint parentIdx = rdr.ReadUInt32();
-                Vector3 initPos = ReadVector3(rdr);
-                Vector4 initRot = ReadVector4(rdr);
-                Vector3 initScale = ReadVector3(rdr);
+                Bone bone = new Bone();
+                bone.Name = ReadCString(rdr);
+                bone.Parent = rdr.ReadUInt32();
+                bone.Position = ReadVector3(rdr);
+                bone.Rotation = ReadVector4(rdr);
+                bone.Scale = ReadVector3(rdr);
 
-                //??How is data on bounding spheres and boxes identified?
-                //float boneRadius = rdr.ReadSingle();
-                //
-                //Vector3 boneBndsMin = ReadVector3(rdr);
-                //Vector3 boneBndsMax = ReadVector3(rdr);
+                byte[] offsetTrans = rdr.ReadBytes(sizeof(float) * 12);
+                bone.ColMask = rdr.ReadByte();
+                if ((bone.ColMask & Bone.BONECOLLISION_SPHERE) != 0)
+                {
+                    bone.ColRadius = rdr.ReadSingle();
+                }
+                else if ((bone.ColMask & Bone.BONECOLLISION_BOX) != 0)
+                {
+                    bone.BoundsMin = ReadVector3(rdr);
+                    bone.BoundsMax = ReadVector3(rdr);
+                }
+                skel.Bones.Add(bone);
             }
 
-            Vector3 boundsMin = ReadVector3(rdr);
-            Vector3 boundsMax = ReadVector3(rdr);
+            ret.Skeleton = skel;
+
+            ret.BoundsMin = ReadVector3(rdr);
+            ret.BoundsMax = ReadVector3(rdr);
 
             for (int i = 0; i < geomCt; ++i)
             {
-                Vector3 geoCenter = ReadVector3(rdr);
+                ret.Geometries[i].Center = ReadVector3(rdr);
             }
+
+            return ret;
         }
 
         static uint[] elementSize =

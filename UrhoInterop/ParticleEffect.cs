@@ -92,6 +92,14 @@ namespace Urho {
             set { sorted_ = value; OnPropertyChanged("Sorted"); }
         }
 
+
+        float animLodBias_ = 0.0f;
+        [DefaultValue(0.0f)]
+        public float AnimLodBias {
+            get { return animLodBias_; }
+            set { animLodBias_ = value; OnPropertyChanged("AnimLodBias"); }
+        }
+
         EmitterType type_;
         [DefaultValue(EmitterType.Sphere)]
         public EmitterType Type {
@@ -254,6 +262,8 @@ namespace Urho {
                     Scaled = s.GetAttribute("enable").Equals("true");
                 foreach (XmlElement s in doc.DocumentElement.GetElementsByTagName("sorted"))
                     Sorted = s.GetAttribute("enable").Equals("true");
+                foreach (XmlElement s in doc.DocumentElement.GetElementsByTagName("animlodbias"))
+                    AnimLodBias = float.Parse(s.GetAttribute("value"));
                 foreach (XmlElement t in doc.DocumentElement.GetElementsByTagName("emittertype")) {
                     foreach (EmitterType type in Enum.GetValues(typeof(EmitterType))) {
                         if (type.ToString().ToLower().Equals(t.GetAttribute("value"))) {
@@ -329,6 +339,7 @@ namespace Urho {
             root.AppendChild(doc.CreateElement("relative").SimpleTag("enable", Relative ? "true" : "false"));
             root.AppendChild(doc.CreateElement("scaled").SimpleTag("enable", Scaled ? "true" : "false"));
             root.AppendChild(doc.CreateElement("sorted").SimpleTag("enable", Sorted ? "true" : "false"));
+            root.AppendChild(doc.CreateElement("animlodbias").SimpleTag("value", AnimLodBias.ToString()));
             root.AppendChild(doc.CreateElement("emittertype").ValueTag(Type.ToString().ToLower()));
             if (EmitterSize != null)
                 root.AppendChild(doc.CreateElement("emittersize").ValueTag(EmitterSize.ToString()));
