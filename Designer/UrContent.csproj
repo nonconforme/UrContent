@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <NuGetPackageImportStamp>3a74bd62</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -64,6 +65,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Animation\ModelAnimation\AnimationList.xaml.cs">
+      <DependentUpon>AnimationList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Animation\NodeAnimation\ObjectAnimationList.xaml.cs">
+      <DependentUpon>ObjectAnimationList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="BaseClass.cs" />
     <Compile Include="Controls\GridEditor.xaml.cs">
       <DependentUpon>GridEditor.xaml</DependentUpon>
@@ -89,6 +96,9 @@
       <DependentUpon>EffectList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Effects\Model\PEProject.cs" />
+    <Compile Include="ErrorDialog.xaml.cs">
+      <DependentUpon>ErrorDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ErrorHandler.cs" />
     <Compile Include="Graph\CurvedArrow.cs" />
     <Compile Include="Graph\GraphCanvas.xaml.cs">
@@ -111,8 +121,16 @@
     <Compile Include="NothingHere.xaml.cs">
       <DependentUpon>NothingHere.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Prefabs\PrefabFolder.cs" />
+    <Compile Include="Prefabs\PrefabList.xaml.cs">
+      <DependentUpon>PrefabList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Project.cs" />
     <Compile Include="ReflectMatch.cs" />
+    <Compile Include="Scenes\SceneFolder.cs" />
+    <Compile Include="Scenes\SceneList.xaml.cs">
+      <DependentUpon>SceneList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SettingsDlg.xaml.cs">
       <DependentUpon>SettingsDlg.xaml</DependentUpon>
     </Compile>
@@ -133,6 +151,14 @@
     </Compile>
     <Compile Include="UrhoPaths.cs" />
     <Compile Include="UserData.cs" />
+    <Page Include="Animation\ModelAnimation\AnimationList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Animation\NodeAnimation\ObjectAnimationList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\GridEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -158,6 +184,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Effects\EffectList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ErrorDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -198,6 +228,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="NothingHere.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Prefabs\PrefabList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Scenes\SceneList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -247,6 +285,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -303,16 +342,20 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Animation\" />
     <Folder Include="Effects\Interop\" />
     <Folder Include="Graph\UINode\" />
     <Folder Include="MaterialEdit\Interop\" />
-    <Folder Include="Objects\" />
     <Folder Include="Render\" />
-    <Folder Include="Scenes\" />
     <Folder Include="ShaderGraph\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\VVVV.FreeImage.3.15.1.1\build\net40\VVVV.FreeImage.targets" Condition="Exists('..\packages\VVVV.FreeImage.3.15.1.1\build\net40\VVVV.FreeImage.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\VVVV.FreeImage.3.15.1.1\build\net40\VVVV.FreeImage.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\VVVV.FreeImage.3.15.1.1\build\net40\VVVV.FreeImage.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -58,7 +58,9 @@
                     <Label Name="lblQuery" Content="Filter" Margin="5" />
                     <TextBox Name="txtQuery" PreviewKeyUp="txtQuery_PreviewKeyUp" MinWidth="160"/>
                 </StackPanel>
-                <DataGrid Name="gridView" ItemsSource="{Binding}"/>
+                <DataGrid Name="gridView" ItemsSource="{Binding}">
+                    
+                </DataGrid>
             </DockPanel>
         </TabItem>
     </TabControl>

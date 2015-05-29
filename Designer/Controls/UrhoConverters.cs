@@ -1,11 +1,14 @@
-﻿using System;
+﻿using FreeImageAPI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Urho;
 
 namespace Designer.Controls {
@@ -175,6 +178,48 @@ namespace Designer.Controls {
                 return new ValidationResult(false, "Incorrect format");
             }
             return new ValidationResult(true, null);
+        }
+    }
+
+    public class PathToImageConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+                return null;
+            string fileName = value.ToString();
+            try
+            {
+                FIBITMAP image = FreeImage.LoadEx(fileName);
+                int width = (int)FreeImage.GetWidth(image);
+                int height = (int)FreeImage.GetHeight(image);
+                int fileBPP = (int)FreeImage.GetBPP(image);
+                return ToBitmapSource(image);
+            }
+            catch (Exception ex)
+            {
+                ErrorHandler.inst().Error(ex);
+                return null;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return null;
+        }
+
+        // Convert a Bitmap to a BitmapSource. 
+        public static BitmapSource ToBitmapSource(FIBITMAP image)
+        {
+            IntPtr ptr = FreeImage.GetHbitmap(image, new IntPtr(0), false); //obtain the Hbitmap
+
+            BitmapSource bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                ptr,
+                IntPtr.Zero,
+                Int32Rect.Empty,
+                System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+
+            return bs;
         }
     }
 }

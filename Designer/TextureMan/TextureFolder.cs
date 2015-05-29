@@ -1,16 +1,21 @@
-﻿using System;
+﻿using FreeImageAPI;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Urho;
 
 namespace Designer.TextureMan {
 
     public abstract class TextureItem : BaseClass {
         public abstract string Name { get; }
+        public abstract BitmapSource ImgSource { get; }
     }
 
     public class TextureFolder : TextureItem {
@@ -102,6 +107,8 @@ namespace Designer.TextureMan {
                 r.Contents.Add(new TextureFolder(s));
             return r;
         }
+
+        public override BitmapSource ImgSource { get { return null; } }
     }
 
     public class TextureLeaf : TextureItem {
@@ -118,6 +125,40 @@ namespace Designer.TextureMan {
 
         public override string Name {
             get { return texture_.Name.Substring(texture_.Name.LastIndexOf("\\") + 1); }
+        }
+
+        public override BitmapSource ImgSource
+        {
+            get
+            {
+                try
+                {
+                    FIBITMAP image = FreeImage.LoadEx(texture_.Name);
+                    int width = (int)FreeImage.GetWidth(image);
+                    int height = (int)FreeImage.GetHeight(image);
+                    int fileBPP = (int)FreeImage.GetBPP(image);
+                    return ToBitmapSource(image, null);
+                } 
+                catch (Exception ex)
+                {
+                    ErrorHandler.inst().Error(ex);
+                    return null;
+                }
+            }
+        }
+
+        // Convert a Bitmap to a BitmapSource. 
+        public static BitmapSource ToBitmapSource(FIBITMAP image, WriteableBitmap bitmap)
+        {
+            IntPtr ptr = FreeImage.GetHbitmap(image, new IntPtr(0), false); //obtain the Hbitmap
+
+            BitmapSource bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                ptr,
+                IntPtr.Zero,
+                Int32Rect.Empty,
+                System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+
+            return bs;
         }
     }
 }

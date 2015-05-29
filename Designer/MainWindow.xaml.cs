@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -21,12 +22,40 @@ namespace Designer {
     /// </summary>
     public partial class MainWindow : ModernWindow {
         static MainWindow inst_;
+        static ErrorHandler errorHandler_;
+        Timer errTimer_;
 
         public MainWindow() {
             inst_ = this;
             InitializeComponent();
             ContentSource = new Uri("LaunchScreen.xaml", UriKind.Relative);
             LinkNavigator.Commands.Add(new Uri("cmd://showSettings", UriKind.Absolute), new RelayCommand(o => showSettings()));
+            errorHandler_ = new ErrorHandler();
+
+            errTimer_ = new Timer();
+            errTimer_.Enabled = true;
+            errTimer_.AutoReset = true;
+            errTimer_.Interval = 200;
+            errTimer_.Elapsed += errTimer_Elapsed;
+            errTimer_.Start();
+        }
+
+        void errTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            this.Dispatcher.BeginInvoke((Action)delegate()
+            {
+                checkErrs();
+            });
+        }
+
+        void checkErrs(params object[] para)
+        {
+            if (errorHandler_.Check())
+            {
+                string msg = errorHandler_.GetMessage();
+                if (msg.Length > 0)
+                    ErrorDialog.Show(msg);
+            }
         }
 
         public static MainWindow inst() { return inst_; }

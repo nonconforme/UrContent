@@ -31,11 +31,12 @@ namespace Designer.TextureMan {
             InitializeComponent();
 
             DataGridTemplateColumn col = new DataGridTemplateColumn();
-            Binding imgBinding = new Binding("Name");
+            Binding imgBinding = new Binding("Name") { Converter = new Controls.PathToImageConverter() };
             FrameworkElementFactory imgFactory = new FrameworkElementFactory(typeof(Image));
             imgFactory.SetBinding(Image.SourceProperty, imgBinding);
             imgFactory.SetValue(Image.MaxHeightProperty, 64.0);
             imgFactory.SetValue(Image.MaxWidthProperty, 64.0);
+            imgFactory.SetValue(Image.TagProperty, "PreviewImage");
             ((DataGridTemplateColumn)col).CellTemplate = new DataTemplate();
             ((DataGridTemplateColumn)col).CellTemplate.VisualTree = imgFactory;
             col.Header = "Preview";
@@ -58,7 +59,7 @@ namespace Designer.TextureMan {
                 nothing_.Visibility = System.Windows.Visibility.Collapsed;
                 textureForm_.Visibility = System.Windows.Visibility.Visible;
                 textureForm_.SetObject(l.Name, l.Texture as Urho.Texture);
-                preview.Source = new BitmapImage(new Uri(l.Texture.Name));
+                preview.Source = l.ImgSource;
             }
             else
             {
